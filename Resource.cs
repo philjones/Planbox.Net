@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Planbox.Net
+﻿namespace Planbox.Net
 {
+    using System.Collections.Generic;
+
     public class ResourcesResult
     {
         public List<Resource> content { get; set; }
@@ -25,6 +21,7 @@ namespace Planbox.Net
     public class Resource
     {
         public int id { get; set; }
+        public int resource_id { get; set; }
         public string name { get; set; }
         public string email { get; set; }
         public int referer_id { get; set; }

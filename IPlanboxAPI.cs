@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Planbox.Net
+﻿namespace Planbox.Net
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public interface IPlanboxAPI
     {
         // Login
@@ -35,17 +31,16 @@ namespace Planbox.Net
         Task<IEnumerable<Event>> GetEvents(string product_id, string start, string end);
 
         // Resources
-
+        Task<IEnumerable<Resource>> GetContacts(); 
         Task<IEnumerable<Resource>> GetResources(string product_id);
 
-        // Timesheet
         /// <summary>
         /// *EXPERIMENTAL* returns the timesheet data for the time period between start and end.
         /// </summary>
         /// <param name="start"></param>
         /// <param name="end"></param>
         /// <returns></returns>
-        Task<TimesheetCollection> GetTimesheet(DateTime start, DateTime end);
+        Task<IEnumerable<Timesheet>> GetTimesheet(DateTime start, DateTime end);
     }
 
     public enum PlanboxStatus
