@@ -45,7 +45,7 @@ namespace Planbox.Net
         public int resource_id { get; set; }
         public int role_id { get; set; }
         public string created_on { get; set; }
-        public int estimate { get; set; }
+        public double estimate { get; set; }
         public double logged { get; set; }
         public string status { get; set; }
         public int story_id { get; set; }
