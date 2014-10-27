@@ -1,5 +1,7 @@
 ﻿namespace Planbox.Net
 {
+    using System;
+
     public class PlanboxTask
     {
         public int id { get; set; }
@@ -12,6 +14,7 @@
         public int role_id { get; set; }
         public double estimate { get; set; }
         public double duration { get; set; }
+        public DateTime? end { get; set; }
         public string status { get; set; }
         public string timer_start { get; set; }
         public int? timer_sum { get; set; }

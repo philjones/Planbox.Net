@@ -321,7 +321,7 @@
        } 
 
 
-        public async Task<IEnumerable<Story>> GetStories(string product_id, IEnumerable<string> iteration_ids)
+        public async Task<IEnumerable<Story>> GetStories(string product_id, IEnumerable<string> iteration_ids = null, IEnumerable<string> resource_ids = null)
         {
             using (var client = new PlanboxClient(this.AccessToken, new HttpClientHandler() { CookieContainer = _cookieContainer }))
             {
@@ -330,7 +330,16 @@
                     new KeyValuePair<string, string>("product_id", product_id),
                 };
 
-                kvps.AddRange(iteration_ids.Select(id => new KeyValuePair<string, string>("iteration_id[]", id)));
+                if (iteration_ids != null)
+                {
+                    kvps.AddRange(iteration_ids.Select(id => new KeyValuePair<string, string>("iteration_id[]", id)));
+                }
+
+                if (resource_ids != null)
+                {
+                    kvps.AddRange(resource_ids.Select(id => new KeyValuePair<string, string>("resource_id[]", id)));
+                }
+                
 
                 var formContent = new FormUrlEncodedContent(kvps);
                 HttpResponseMessage response = await client.PostAsync("api/get_stories", formContent);

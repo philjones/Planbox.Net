@@ -16,7 +16,7 @@
 
         // Stories
         Task<IEnumerable<Story>> GetStories(string product_id, string project_id);
-        Task<IEnumerable<Story>> GetStories(string product_id, IEnumerable<string> story_ids);
+        Task<IEnumerable<Story>> GetStories(string product_id, IEnumerable<string> iteration_ids = null, IEnumerable<string> resource_ids = null);
 
         // Tasks
         Task<PlanboxTask> AddTask(string story_id, string name = null, string description = null,
