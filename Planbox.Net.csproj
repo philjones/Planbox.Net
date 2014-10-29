@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Event.cs" />
     <Compile Include="LoggingHandler.cs" />
+    <Compile Include="LoginFailureException.cs" />
     <Compile Include="PlanboxAPI.cs" />
     <Compile Include="IPlanboxAPI.cs" />
     <Compile Include="PlanboxClient.cs" />

@@ -42,7 +42,7 @@
                     }
                     else
                     {
-                        return result;
+                        throw new LoginFailureException(result.content.ToString());
                     }
                 }
                 else
