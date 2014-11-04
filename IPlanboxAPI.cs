@@ -7,6 +7,7 @@
     public interface IPlanboxAPI
     {
         // Login
+        void SetAccessToken(string access_token);
         Task<string> Login(string email, string password);
         Task<Resource> GetLoggedIn();
 
@@ -17,6 +18,12 @@
         // Stories
         Task<IEnumerable<Story>> GetStories(string product_id, string project_id);
         Task<IEnumerable<Story>> GetStories(string product_id, IEnumerable<string> iteration_ids = null, IEnumerable<string> resource_ids = null);
+        Task<IEnumerable<Story>> UpdateStory(string story_id, string name = null, string status = null, string description = null,int? points = null);
+
+        /// <summary>
+        /// *EXPERIMENTAL* Update a story status
+        /// </summary>
+        Task<Story> UpdateStoryStatus(string story_id, UpdateStoryAction action);
 
         // Tasks
         Task<PlanboxTask> AddTask(string story_id, string name = null, string description = null,

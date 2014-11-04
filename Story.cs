@@ -51,4 +51,26 @@
         public string redirect { get; set; }
         public int time { get; set; }
     }
+
+    public class UpdateStoryStatusResult
+    {
+        public UpdateStoryStatus content { get; set; } 
+        public string code { get; set; }
+        public string redirect { get; set; }
+        public int time { get; set; }
+    }
+
+    public class UpdateStoryStatus
+    {
+        public Story story { get; set; }
+        public int history_id { get; set; }
+    }
+
+    public enum UpdateStoryAction
+    {
+        complete,
+        deliver,
+        accept,
+        reject
+    }
 }

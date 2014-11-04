@@ -19,6 +19,11 @@
             _cookieContainer = new CookieContainer();
         }
 
+        public void SetAccessToken(string access_token)
+        {
+            this.AccessToken = access_token;
+        }
+
         public async Task<string> Login(string email, string password)
         {
             using (var client = new HttpClient(new HttpClientHandler() { CookieContainer = _cookieContainer }))
@@ -236,6 +241,73 @@
             list.Add(new KeyValuePair<string,string>(key, value.ToString()));
         }
 
+        public async Task<IEnumerable<Story>> UpdateStory(string story_id, string name = null, string status = null, string description = null, int? points = null)
+        {
+            using (var client = new PlanboxClient(this.AccessToken, new HttpClientHandler() { CookieContainer = _cookieContainer }))
+            {
+                var kvps = new List<KeyValuePair<string, string>>();
+
+                kvps.Add(new KeyValuePair<string, string>("story_id", story_id));
+
+                AddIfNotNull(kvps, "name", name);
+                AddIfNotNull(kvps, "description", description);
+                AddIfNotNull(kvps, "status", status);
+                
+
+                var formContent = new FormUrlEncodedContent(kvps);
+                HttpResponseMessage response = await client.PostAsync("api/update_story", formContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<StoriesResult>();
+                    if (result.code == "ok")
+                    {
+                        return result.content;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return null;
+                }
+
+            }
+        }
+
+        public async Task<Story> UpdateStoryStatus(string story_id, UpdateStoryAction action)
+        {
+            using (var client = new PlanboxClient(this.AccessToken, new HttpClientHandler() { CookieContainer = _cookieContainer }))
+            {
+                var kvps = new List<KeyValuePair<string, string>>();
+
+                kvps.Add(new KeyValuePair<string, string>("story_id", story_id));
+                kvps.Add(new KeyValuePair<string, string>("action", action.ToString()));
+
+                var formContent = new FormUrlEncodedContent(kvps);
+                HttpResponseMessage response = await client.PostAsync("nik/update_story_status", formContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<UpdateStoryStatusResult>();
+                    if (result.code == "ok")
+                    {
+                        return result.content.story;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    var result = await response.Content.ReadAsStringAsync();
+                    return null;
+                }
+
+            }
+        }
 
         public async Task<PlanboxTask> AddTask(string story_id, string name = null, string description = null, string tags = null, string resource_id = null, string role_id = null, string estimate = null, decimal? duration = null, DateTime? timer_start = null, int? timer_sum_in_seconds = null, string status = null)
         {
