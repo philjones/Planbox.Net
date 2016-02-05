@@ -12,7 +12,7 @@
         Task<Resource> GetLoggedIn();
 
         // Products & Projects
-        Task<bool> GetProducts();
+        Task<IEnumerable<Product>> GetProducts();
         Task<bool> GetProjects(string product_id);
 
         // Stories

@@ -11,7 +11,7 @@
         {
             if (string.IsNullOrEmpty(accessToken)) throw new Exception("Missing Planbox access token - please call Login first");
 
-            this.BaseAddress = new Uri("https://www.planbox.com/");
+            this.BaseAddress = new Uri("https://work.planbox.com/");
             this.DefaultRequestHeaders.Authorization = this.AccessTokenAsAuthenticationHeader(accessToken);
             this.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

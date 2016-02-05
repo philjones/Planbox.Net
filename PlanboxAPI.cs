@@ -28,7 +28,7 @@
         {
             using (var client = new HttpClient(new HttpClientHandler() { CookieContainer = _cookieContainer }))
             {
-                client.BaseAddress = new Uri("https://www.planbox.com/");
+                client.BaseAddress = new Uri("https://work.planbox.com");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 
                 var kvps = new List<KeyValuePair<string, string>>();
@@ -36,7 +36,7 @@
                 kvps.Add(new KeyValuePair<string, string>("password",password));
 
                 var formContent = new FormUrlEncodedContent(kvps);
-                HttpResponseMessage response = await client.PostAsync("api/login", formContent);
+                HttpResponseMessage response = await client.PostAsync("/api/auth", formContent);
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<dynamic>();
@@ -89,9 +89,9 @@
             }
         }
 
-        public async Task<bool> GetProducts()
+        public async Task<IEnumerable<Product>> GetProducts()
         {
-            using (var client = new PlanboxClient(this.AccessToken, new LoggingHandler(new HttpClientHandler() { CookieContainer = _cookieContainer })))
+            using (var client = new PlanboxClient(this.AccessToken, new HttpClientHandler() { CookieContainer = _cookieContainer }))
             {
                 var kvps = new List<KeyValuePair<string, string>>();
 
@@ -99,20 +99,22 @@
                 HttpResponseMessage response = await client.PostAsync("api/get_products", formContent);
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = await response.Content.ReadAsAsync<dynamic>();
+                    var result = await response.Content.ReadAsAsync<ProductsResult>();
                     if (result.code == "ok")
                     {
-                        return true;
+                        var products = result.content;
+                        return products;
                     }
                     else
                     {
-                        return false;
+                        // TODO: result was not OK
+                        return new List<Product>();
                     }
                 }
                 else
                 {
                     var result = await response.Content.ReadAsStringAsync();
-                    return false;
+                    throw new Exception(result);
                 }
 
             }
@@ -120,7 +122,7 @@
 
         public async Task<bool> GetProjects(string product_id)
         {
-            using (var client = new PlanboxClient(this.AccessToken, new LoggingHandler(new HttpClientHandler() { CookieContainer = _cookieContainer })))
+            using (var client = new PlanboxClient(this.AccessToken, new HttpClientHandler() { CookieContainer = _cookieContainer }))
             {
                 var kvps = new List<KeyValuePair<string, string>>();
                 kvps.Add(new KeyValuePair<string, string>("product_id", product_id));
@@ -144,8 +146,7 @@
                 else
                 {
                     var result = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(result);
-                    return false;
+                    throw new Exception(result);
                 }
 
             }
